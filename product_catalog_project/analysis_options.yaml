@@ -1,6 +1,10 @@
 include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
+  errors:
+    prefer_asserts_with_message: ignore
+    lines_longer_than_80_chars: ignore
+    sort_constructors_first: ignore
   exclude:
     - "/*.g.dart"
     - "*.g.dart"
