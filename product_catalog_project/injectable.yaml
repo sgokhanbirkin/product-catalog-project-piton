@@ -1,0 +1,10 @@
+# injectable.yaml
+
+generate_for:
+  - lib/core/di/di_config.dart
+  - lib/core/routes/app_router.dart
+  - lib/core/service/auth_service.dart
+  - lib/core/service/logger_service.dart
+  - lib/core/service/logging_interceptor.dart
+  - lib/core/service/project_network_manager.dart
+  - lib/core/repository/category_repository.dart

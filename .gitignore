@@ -1,0 +1,70 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+*/.env
+.env
+./script/
+.*.sh
+.*.env
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+product_catalog_project/script/lang.sh
+product_catalog_project/.env
+product_catalog_project/.env
+*/.g.dart
+*.*.g.dart
+product_catalog_project/lib/core/di/di_config.g.dart
+/product_catalog_project/ios
+/product_catalog_project/*.g.dart
+product_catalog_project/lib/product/init/language/locale_keys.g.dart
+product_catalog_project/linux/flutter/generated_plugin_registrant.cc
+product_catalog_project/linux/flutter/generated_plugins.cmake
+product_catalog_project/macos/Flutter/GeneratedPluginRegistrant.swift
+product_catalog_project/windows/flutter/generated_plugin_registrant.cc
+product_catalog_project/windows/flutter/generated_plugins.cmake
+product_catalog_project/ios/Runner.xcodeproj/project.pbxproj
+product_catalog_project/ios/Runner.xcworkspace/contents.xcworkspacedata
+product_catalog_project/lib/core/di/injectable_config.config.dart
+product_catalog_project/lib/core/routes/app_router.gr.dart
+product_catalog_project/lib/gen/assets.gen.dart

@@ -1,48 +1,33 @@
+// lib/core/service/project_network_manager.dart
+
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
-import 'package:product_catalog_project/core/service/dio_error_handling.dart';
+import 'package:product_catalog_project/core/service/auth_interceptor.dart';
+import 'package:product_catalog_project/core/service/auth_service.dart';
+import 'package:product_catalog_project/core/service/logging_interceptor.dart';
+
+const BASE_URL = 'https://assign-api.piton.com.tr/api/rest';
 
 @singleton
 class ProjectNetworkManager {
-  ProjectNetworkManager() {
-    dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        headers: {'AnalyticsToken': '068946dc-cea6-4d9e-9881-bd97e89e771b'},
-        connectTimeout: const Duration(seconds: 90),
-        receiveTimeout: const Duration(seconds: 90),
-      ),
-    );
+  final Dio dio;
+  final AuthService _authService;
+  final LoggingInterceptor _loggingInterceptor;
 
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          return handler.next(options);
-        },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-        onError: (DioException error, handler) {
-          DioErrorHandling.handleError(error);
-          return handler.next(error);
-        },
-      ),
-    );
-  }
-  late final Dio dio;
-
-  final String baseUrl = dotenv.env['BASE_URL']!;
-
-  Future<void> addBaseHeader([String? token]) async {
-    if (token != null && token.isNotEmpty) {
-      dio.options.headers['authorization'] = token;
-    } else {
-      dio.options.headers.remove('authorization');
-    }
-  }
-
-  void changeLocale(String locale) {
-    dio.options.headers['locale'] = locale;
+  ProjectNetworkManager(
+    this._authService,
+    this._loggingInterceptor,
+  ) : dio = Dio(
+          BaseOptions(
+            baseUrl: BASE_URL,
+            connectTimeout: const Duration(seconds: 50),
+            receiveTimeout: const Duration(seconds: 30),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          ),
+        ) {
+    dio.interceptors.add(AuthInterceptor(_authService));
+    dio.interceptors.add(_loggingInterceptor);
   }
 }
