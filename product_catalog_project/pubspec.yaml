@@ -21,6 +21,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_riverpod: ^2.6.1
   flutter_secure_storage: ^9.2.2
+  flutter_svg: ^2.0.16
   get_it: ^7.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -45,5 +46,4 @@ flutter:
   uses-material-design: true
   assets:
     - asset/translations/
-    - assets/images/
-  #   - images/a_dot_ham.jpeg
+    - asset/images/

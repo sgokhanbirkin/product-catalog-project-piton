@@ -34,12 +34,12 @@ void main() async {
   runApp(
     ProviderScope(
       child: EasyLocalization(
-        supportedLocales: [
+        supportedLocales: const [
           Locale('en'),
           Locale('tr'),
         ],
         path: 'assets/translations',
-        fallbackLocale: Locale('en'),
+        fallbackLocale: const Locale('en'),
         child: ProductLocalization(
           child: MyApp(),
         ),

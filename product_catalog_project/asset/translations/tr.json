@@ -1,4 +1,8 @@
 {
+    "splash":{
+        "login": "Giriş Yap",
+        "skip": "Atla"
+    },
     "home":{
         "title": "Ana Sayfa"
     },
@@ -10,5 +14,41 @@
             "version":"Versiyon",
             "content":"İçerik"
         }
-    }
+    },
+    "login":{
+        "email": "E-posta",
+        "password": "Şifre",
+        "forgot_password": "Şifremi Unuttum?",
+        "login": "Giriş Yap",
+        "register": "Kayıt Ol",
+        "invalid_credentials": "Geçersiz giriş yaptınız. Lütfen tekrar deneyin.",
+        "wrong_email_format": "Lütfen geçerli bir e-posta adresi girin.",
+        "wrong_password": "Şifre en az 6 karakter olmalıdır.",
+        "remember_me": "Beni Hatırla",
+        "welcome_back": "Tekrar hoşgeldiniz!",
+        "login_to_your_account": "Hesabınıza giriş yapın",
+        "login_error_fail": "Giriş başarısız oldu, bilgilerinizi kontrol edin.",
+        "login_error_api": "API isteği sırasında hata oluştu. Lütfen tekrar deneyin.",
+        "login_error_unknown": "Bilinmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "login_error": "Hata",
+        "login_ok": "Tamam"
+    },
+    "register": {
+        "welcome": "Hoş geldiniz!",
+        "full_name": "Ad",
+        "email": "E-posta",
+        "password": "Şifre",
+        "password_length": "Şifre en az 6 karakter olmalı",
+        "wrong_email_format": "Geçersiz e-posta formatı",
+        "wrong_password": "Şifreyi kontrol edin",
+        "register": "Kayıt Ol",
+        "register_error_fail": "Kayıt başarısız oldu, lütfen tekrar deneyin",
+        "register_error_api": "API isteği hatası, lütfen tekrar deneyin",
+        "register_error_unknown": "Bilinmeyen bir hata oluştu",
+        "already_have_account": "Hesabınız var mı? Giriş yapın",
+        "register_ok": "Tamam",
+        "full_name_required": "Adınızı giriniz.",
+        "invalid_email": "Geçersiz e-posta formatı.",
+        "password_too_short": "Şifre en az 6 karakter olmalıdır."
+  }
 }
