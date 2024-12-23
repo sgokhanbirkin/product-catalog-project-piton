@@ -69,3 +69,4 @@ product_catalog_project/lib/core/di/injectable_config.config.dart
 product_catalog_project/lib/core/routes/app_router.gr.dart
 product_catalog_project/lib/gen/assets.gen.dart
 product_catalog_project/lib/core/models/category.g.dart
+product_catalog_project/.env
