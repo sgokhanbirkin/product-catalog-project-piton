@@ -6,6 +6,7 @@ import 'package:product_catalog_project/core/extensions/context_extensions.dart'
 import 'package:product_catalog_project/core/models/product.dart';
 import 'package:product_catalog_project/core/providers/repository_provider.dart';
 import 'package:product_catalog_project/core/repository/product_repository.dart';
+import 'package:product_catalog_project/core/routes/app_router.dart';
 import 'package:product_catalog_project/features/category/view_models/category_products_view_model.dart';
 
 @RoutePage()
@@ -101,7 +102,10 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
                 final imageUrl = viewModel.getImageUrl(product.cover ?? '');
 
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    context
+                        .pushRoute(ProductDetailRoute(productId: product.id));
+                  },
                   child: _productCard(
                     imageUrl: imageUrl,
                     product: product,

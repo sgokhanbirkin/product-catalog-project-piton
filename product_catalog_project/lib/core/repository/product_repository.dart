@@ -71,13 +71,14 @@ class ProductRepository {
     }
   }
 
+  // Fetch products by category from Hive cache
   Future<List<Product>> getProductsByCategory(int categoryId) async {
     try {
-      // Hive'da "products" box'ını açıyoruz
+      // Open the category-specific box in Hive
       final Box<Product> productBox =
           await Hive.openBox<Product>('category_$categoryId');
 
-      // Verilen kategoriye ait ürünleri filtreleyerek döndürüyoruz
+      // Retrieve products for the specified category
       final List<Product> productsInCategory = productBox.values.toList();
       return productsInCategory;
     } catch (e) {
@@ -86,9 +87,29 @@ class ProductRepository {
     }
   }
 
+  // Fetch product details by productId from Hive cache
+  Future<Product> getProductById(int productId) async {
+    try {
+      // Open the general product box
+      final Box<Product> productBox = await Hive.openBox<Product>('products');
+
+      // Retrieve the product with the given productId
+      final product = productBox.get(productId);
+
+      if (product != null) {
+        return product;
+      } else {
+        throw Exception('Product not found');
+      }
+    } catch (e) {
+      throw Exception('Error fetching product details: $e');
+    }
+  }
+
+  // Fetch product image URL
   Future<String> getImageUrl({required String productFileName}) async {
     try {
-      // Doğru URL ile POST isteği gönderme
+      // Send a POST request with the correct URL
       final response = await _networkManager.postData(
         endpoint: '/cover_image',
         data: {
@@ -96,9 +117,8 @@ class ProductRepository {
         },
       );
 
-      // Status code kontrolü
+      // Check the status code and response format
       if (response.statusCode == 200) {
-        // 'url' değerini doğru şekilde alıyoruz
         if (response.data != null && response.data is Map) {
           return response.data['action_product_image']["url"] as String;
         } else {
@@ -113,7 +133,8 @@ class ProductRepository {
     }
   }
 
-  Future<String> getCategoryName({required categoryId}) async {
+  // Fetch the category name by categoryId
+  Future<String> getCategoryName({required int categoryId}) async {
     var categories = await _categoryRepository.fetchCategories();
     final category = categories.firstWhere((c) => c.id == categoryId);
     return category.name ?? '';

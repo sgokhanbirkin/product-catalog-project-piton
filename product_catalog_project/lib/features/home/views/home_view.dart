@@ -221,7 +221,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
         children: products.map((product) {
           final imageUrl = viewModel.getImageUrl(product.cover ?? '');
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.pushRoute(ProductDetailRoute(productId: product.id));
+            },
             child: Padding(
               padding: context.paddingLow,
               child: Container(

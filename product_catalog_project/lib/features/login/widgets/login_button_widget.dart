@@ -11,7 +11,7 @@ class _LoginButtonWidget extends StatelessWidget {
       onPressed: () {
         viewModel.login(context);
       },
-      buttonText: 'login.login'.tr(),
+      buttonText: Text('login.login'.tr()),
     );
   }
 }

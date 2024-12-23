@@ -15,7 +15,9 @@ class _RegisterButton extends StatelessWidget {
       onPressed: () {
         viewModel.register(context);
       },
-      buttonText: 'register.register'.tr(),
+      buttonText: Text(
+        'register.register'.tr(),
+      ),
     );
   }
 }

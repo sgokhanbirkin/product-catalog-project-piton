@@ -8,7 +8,7 @@ class CustomElevatedButton extends StatelessWidget {
     super.key,
   });
   final VoidCallback onPressed;
-  final String buttonText;
+  final Widget buttonText;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: const TextStyle(
-            color: Colors.white, // Yazı rengi beyaz
-          ),
-        ),
+        child: buttonText,
       ),
     );
   }

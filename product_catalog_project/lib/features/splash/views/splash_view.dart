@@ -44,7 +44,9 @@ class SplashView extends ConsumerWidget {
             SizedBox(height: context.height * 0.33),
             // Login Butonu
             CustomElevatedButton(
-              buttonText: 'splash.login'.tr(),
+              buttonText: Text(
+                'splash.login'.tr(),
+              ),
               onPressed: () {
                 // Butona tıklanınca timer'ı iptal et ve yönlendir
                 ref.read(splashViewModelProvider.notifier).onButtonPressed();
