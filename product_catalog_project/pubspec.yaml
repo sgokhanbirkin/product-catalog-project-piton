@@ -14,7 +14,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.7.0
   easy_localization: ^3.0.7
-  envied: ^1.0.0
   equatable: ^2.0.7
   flutter:
     sdk: flutter
@@ -33,7 +32,6 @@ dependencies:
 dev_dependencies:
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.14
-  envied_generator: ^1.0.0
   flutter_gen_runner: ^5.8.0
   flutter_lints: ^4.0.0
   flutter_test:
@@ -45,5 +43,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - .env
     - asset/translations/
     - asset/images/

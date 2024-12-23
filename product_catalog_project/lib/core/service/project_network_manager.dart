@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
 import 'package:product_catalog_project/core/service/auth_interceptor.dart';
 import 'package:product_catalog_project/core/service/auth_service.dart';
 import 'package:product_catalog_project/core/service/logging_interceptor.dart';
 
-const BASE_URL = 'https://assign-api.piton.com.tr/api/rest';
+var BASE_URL = dotenv.env['BASE_URL'] as String;
 
 @singleton
 class ProjectNetworkManager {
