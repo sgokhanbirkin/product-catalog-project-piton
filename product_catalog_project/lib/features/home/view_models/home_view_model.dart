@@ -28,7 +28,6 @@ class HomeViewModel extends StateNotifier<HomeState> {
 
       // Kategorilere ait ürünleri çek
       for (final category in categories) {
-        print('Kategori: ${category.name}');
         await _productRepository.fetchProductsByCategory(category.id);
       }
 

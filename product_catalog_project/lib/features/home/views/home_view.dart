@@ -2,11 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:product_catalog_project/core/extensions/context_extensions.dart';
 import 'package:product_catalog_project/core/models/category.dart';
 import 'package:product_catalog_project/core/models/product.dart';
 import 'package:product_catalog_project/core/providers/repository_provider.dart';
+import 'package:product_catalog_project/core/routes/app_router.dart';
+import 'package:product_catalog_project/features/category/views/category_products_view.dart';
 import 'package:product_catalog_project/features/home/state/home_state.dart';
 import 'package:product_catalog_project/features/home/view_models/home_view_model.dart';
 import 'package:product_catalog_project/product/widgets/custom_logo_widget.dart';
@@ -182,11 +183,15 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            category.name ?? '',
+                            category.name,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pushRoute(
+                                CategoryProductsRoute(categoryId: category.id),
+                              );
+                            },
                             child: const Text(
                               'View All',
                               style: TextStyle(

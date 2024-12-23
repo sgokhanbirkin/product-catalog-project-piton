@@ -31,9 +31,6 @@ class AppRouter extends RootStackRouter {
           page: RegisterRoute.page,
         ),
         AutoRoute(
-          page: RegisterRoute.page,
-        ),
-        AutoRoute(
           page: HomeRoute.page,
         ),
         AutoRoute(

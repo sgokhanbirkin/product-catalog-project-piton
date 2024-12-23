@@ -112,4 +112,10 @@ class ProductRepository {
       throw Exception('Beklenmeyen bir hata oluştu: $e');
     }
   }
+
+  Future<String> getCategoryName({required categoryId}) async {
+    var categories = await _categoryRepository.fetchCategories();
+    final category = categories.firstWhere((c) => c.id == categoryId);
+    return category.name ?? '';
+  }
 }
