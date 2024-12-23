@@ -1,11 +1,10 @@
 // lib/features/splash/views/splash_view.dart
 
-import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:product_catalog_project/core/extensions/context_extensions.dart';
 import 'package:product_catalog_project/core/routes/app_router.dart';
 import 'package:product_catalog_project/features/splash/view_models/splash_view_model.dart';
@@ -26,7 +25,7 @@ class SplashView extends ConsumerWidget {
 
     if (isNavigated) {
       context.router.replace(
-        const LoginRoute(),
+        const HomeRoute(),
       );
     } else {
       // Timer'ı başlat

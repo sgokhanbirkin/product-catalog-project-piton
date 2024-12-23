@@ -1,5 +1,3 @@
-// lib/core/service/project_network_manager.dart
-
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:product_catalog_project/core/service/auth_interceptor.dart';
@@ -29,5 +27,18 @@ class ProjectNetworkManager {
         ) {
     dio.interceptors.add(AuthInterceptor(_authService));
     dio.interceptors.add(_loggingInterceptor);
+  }
+
+  // POST request method example
+  Future<Response> postData({
+    required String endpoint,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final response = await dio.post(endpoint, data: data);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

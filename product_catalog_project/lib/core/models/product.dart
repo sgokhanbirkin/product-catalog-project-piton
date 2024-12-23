@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product.g.dart';
+part 'product_adapter.dart';
 
 @HiveType(typeId: 0)
 @JsonSerializable()
@@ -10,43 +11,43 @@ class Product {
   final int id;
 
   @HiveField(1)
-  final String name;
+  final String? name;
 
   @HiveField(2)
-  final String author;
+  final String? author;
 
   @HiveField(3)
-  final String cover;
+  final String? cover;
 
   @HiveField(4)
-  final DateTime createdAt;
+  final String? created_at;
 
   @HiveField(5)
-  final String description;
+  final String? description;
 
   @HiveField(6)
-  final double price;
+  final double? price;
 
   @HiveField(7)
-  final int sales;
+  final int? sales;
 
   @HiveField(8)
-  final String slug;
+  final String? slug;
 
   @HiveField(9)
-  final LikesAggregate likesAggregate;
+  final LikesAggregate? likesAggregate;
 
   Product({
     required this.id,
-    required this.name,
-    required this.author,
-    required this.cover,
-    required this.createdAt,
-    required this.description,
-    required this.price,
-    required this.sales,
-    required this.slug,
-    required this.likesAggregate,
+    this.name = '',
+    this.author = '',
+    this.cover = '',
+    this.created_at = '',
+    this.description = '',
+    this.price = 0.0,
+    this.sales = 0,
+    this.slug = '',
+    this.likesAggregate = null,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) =>
@@ -65,9 +66,9 @@ class Product {
 @JsonSerializable()
 class LikesAggregate {
   @HiveField(0)
-  final Aggregate aggregate;
+  final Aggregate? aggregate;
 
-  LikesAggregate({required this.aggregate});
+  LikesAggregate({this.aggregate = null});
 
   factory LikesAggregate.fromJson(Map<String, dynamic> json) =>
       _$LikesAggregateFromJson(json);
@@ -79,9 +80,9 @@ class LikesAggregate {
 @JsonSerializable()
 class Aggregate {
   @HiveField(0)
-  final int count;
+  final int? count;
 
-  Aggregate({required this.count});
+  Aggregate({this.count = 0});
 
   factory Aggregate.fromJson(Map<String, dynamic> json) =>
       _$AggregateFromJson(json);

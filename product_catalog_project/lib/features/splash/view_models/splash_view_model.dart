@@ -2,27 +2,39 @@
 
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:product_catalog_project/core/providers/auth_service_provider.dart';
+import 'package:product_catalog_project/core/service/auth_service.dart';
 
 final splashViewModelProvider =
     StateNotifierProvider<SplashViewModel, bool>((ref) {
-  return SplashViewModel();
+  final authService = ref.read(authServiceProvider);
+  return SplashViewModel(authService);
 });
 
 class SplashViewModel extends StateNotifier<bool> {
-  SplashViewModel() : super(false);
+  final AuthService _authService;
 
-  // Timer objesi
+  SplashViewModel(this._authService) : super(false);
+
   Timer? _timer;
 
   // 3 saniye sonra yönlendirmeyi başlatan fonksiyon
   void startTimer() {
-    // Timer'ı başlatıyoruz
-    _timer = Timer(const Duration(seconds: 3), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       state = true; // 3 saniye sonra state değişiyor ve yönlendirme yapılacak
     });
   }
 
-  // Yönlendirme için
+  // Token kontrolü ve yönlendirme için
+  Future<void> checkTokenAndNavigate() async {
+    final token = await _authService.getToken();
+    if (token != null) {
+      state = true; // Direkt Home'a yönlendir
+    } else {
+      state = false; // Login ve Atla butonlarını göster
+    }
+  }
+
   void navigateToHome() {
     state = true; // state değişir ve navigasyon başlatılır
   }

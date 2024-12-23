@@ -11,6 +11,8 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../product/cache/category_cache_manager.dart' as _i103;
+import '../../product/cache/product_cache_manager.dart' as _i492;
 import '../repository/category_repository.dart' as _i25;
 import '../repository/product_repository.dart' as _i36;
 import '../routes/app_router.dart' as _i629;
@@ -39,11 +41,14 @@ _i174.GetIt $initGetIt(
         gh<_i850.AuthService>(),
         gh<_i527.LoggingInterceptor>(),
       ));
-  gh.factory<_i25.CategoryRepository>(
-      () => _i25.CategoryRepository(gh<_i933.ProjectNetworkManager>()));
+  gh.factory<_i25.CategoryRepository>(() => _i25.CategoryRepository(
+        gh<_i933.ProjectNetworkManager>(),
+        gh<_i103.CategoryCacheManager>(),
+      ));
   gh.factory<_i36.ProductRepository>(() => _i36.ProductRepository(
         gh<_i933.ProjectNetworkManager>(),
         gh<_i25.CategoryRepository>(),
+        gh<_i492.ProductCacheManager>(),
       ));
   return getIt;
 }

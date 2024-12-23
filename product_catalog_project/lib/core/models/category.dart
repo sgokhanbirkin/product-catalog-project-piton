@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'category.g.dart';
+part 'category_adapter.dart';
 
 @HiveType(typeId: 3)
 @JsonSerializable()
@@ -13,12 +14,12 @@ class Category {
   final String name;
 
   @HiveField(2)
-  final DateTime createdAt;
+  final String created_at;
 
   Category({
     required this.id,
     required this.name,
-    required this.createdAt,
+    required this.created_at,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) =>

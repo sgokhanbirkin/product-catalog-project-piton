@@ -18,11 +18,9 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
 
-  /*// Hive adapter'larını kaydetme
-  Hive.registerAdapter(ProductAdapter());
-  Hive.registerAdapter(LikesAggregateAdapter());
-  Hive.registerAdapter(AggregateAdapter());
-  Hive.registerAdapter(CategoryAdapter());/ */
+  Hive
+    ..registerAdapter(CategoryAdapter())
+    ..registerAdapter(ProductAdapter());
 
   // Hive kutularını açma
   await Hive.openBox<Product>('products');

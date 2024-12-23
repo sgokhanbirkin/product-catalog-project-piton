@@ -1,10 +1,12 @@
 // lib/features/auth/view_models/login_view_model.dart
 
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:product_catalog_project/core/providers/auth_service_provider.dart';
+import 'package:product_catalog_project/core/routes/app_router.dart';
 import 'package:product_catalog_project/core/service/auth_service.dart';
 import 'package:product_catalog_project/features/login/state/login_state.dart';
 
@@ -59,16 +61,22 @@ class LoginViewModel extends StateNotifier<LoginState> {
           password: passwordController.text,
           context: context,
         );
+        state = state.copyWith(
+          isLoggedIn: true,
+        );
 
-        // Update state for successful login
-        state = state.copyWith(isLoggedIn: true);
+        print('Login successful');
+
+        // If login is successful, navigate to HomePage
+        await context.router
+            .replace(const HomeRoute()); // Navigates to HomePage
 
         // Clear previous errors
         emailErrorNotifier.value = null;
         passwordErrorNotifier.value = null;
       } catch (e) {
         // Update state with error if login fails
-
+        print('Login failed: $e');
         passwordErrorNotifier.value = 'login.invalid_credentials'.tr();
       }
     } else {

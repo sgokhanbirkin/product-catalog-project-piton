@@ -13,7 +13,6 @@ class AuthService {
   final Dio _dio = Dio(); // Dio ile API'ye istek göndereceğiz.
   static const String _tokenKey = 'auth_token';
 
-  // API'ye login isteği atılıyor
   Future<void> login({
     required String email,
     required String password,
@@ -27,17 +26,11 @@ class AuthService {
           'password': password,
         },
       );
-
       if (response.statusCode == 200) {
         final token = response.data['action_login']['token'];
 
         // Token'ı kaydet
         await saveToken(token as String);
-
-        // Eğer "Remember Me" aktifse token'ı kaydedeceğiz
-        if (token != null) {
-          await saveToken(token);
-        }
       } else {
         _showErrorPopup(context, 'login.login_error_fail'.tr());
         throw Exception('login.login_error_fail'.tr());
