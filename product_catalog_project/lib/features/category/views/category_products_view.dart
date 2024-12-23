@@ -26,6 +26,8 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
   late Future<List<Product>> products;
   late CategoryProductsViewModel viewModel;
   late ProductRepository productRepository;
+  TextEditingController _searchController =
+      TextEditingController(); // Text controller for search query
 
   @override
   void initState() {
@@ -35,6 +37,21 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
     viewModel = CategoryProductsViewModel(productRepository);
   }
 
+  void _filterProducts(String query) {
+    // Filter products based on the search query
+    setState(() {
+      products = productRepository.getProductsByCategory(widget.categoryId);
+      products = products.then((productList) {
+        return productList.where((product) {
+          final name = product.name?.toLowerCase() ?? '';
+          final author = product.author?.toLowerCase() ?? '';
+          return name.contains(query.toLowerCase()) ||
+              author.contains(query.toLowerCase());
+        }).toList();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,17 +59,12 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
         FutureBuilder<String>(
           future: viewModel.getCategoryName(categoryId: widget.categoryId),
           builder: (context, snapshot) {
-            // While waiting for data
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Text('Loading...');
             }
-
-            // If an error occurred while fetching data
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
-
-            // If the data is fetched successfully
             if (snapshot.hasData) {
               return Padding(
                 padding: const EdgeInsets.all(8),
@@ -64,60 +76,72 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
                 ),
               );
             }
-
-            // If no data available
             return const Text('No Category');
           },
         ),
       ]),
-      body: FutureBuilder<List<Product>>(
-        future: products,
-        builder: (context, snapshot) {
-          // While waiting for data
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          // If an error occurred while fetching data
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          // If the data is fetched successfully
-          if (snapshot.hasData) {
-            final productsInCategory = snapshot.data!;
-
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 items per row
-                crossAxisSpacing:
-                    context.width * 0.04, // Dynamic horizontal spacing
-                mainAxisSpacing:
-                    context.height * 0.03, // Dynamic vertical spacing
-                childAspectRatio: 0.55, // Adjusted to make the items larger
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: context.width * 0.05),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search for products...',
+                prefixIcon: const Icon(Icons.search),
+                fillColor: const Color.fromARGB(26, 97, 81, 221),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
               ),
-              itemCount: productsInCategory.length,
-              itemBuilder: (context, index) {
-                final product = productsInCategory[index];
-                final imageUrl = viewModel.getImageUrl(product.cover ?? '');
+              onChanged: _filterProducts, // Trigger filter on text change
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<Product>>(
+              future: products,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (snapshot.hasData) {
+                  final productsInCategory = snapshot.data!;
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 items per row
+                      crossAxisSpacing: context.width * 0.04,
+                      mainAxisSpacing: context.height * 0.03,
+                      childAspectRatio: 0.55,
+                    ),
+                    itemCount: productsInCategory.length,
+                    itemBuilder: (context, index) {
+                      final product = productsInCategory[index];
+                      final imageUrl =
+                          viewModel.getImageUrl(product.cover ?? '');
 
-                return GestureDetector(
-                  onTap: () {
-                    context
-                        .pushRoute(ProductDetailRoute(productId: product.id));
-                  },
-                  child: _productCard(
-                    imageUrl: imageUrl,
-                    product: product,
-                  ),
-                );
+                      return GestureDetector(
+                        onTap: () {
+                          context.pushRoute(
+                              ProductDetailRoute(productId: product.id));
+                        },
+                        child: _productCard(
+                          imageUrl: imageUrl,
+                          product: product,
+                        ),
+                      );
+                    },
+                  );
+                }
+                return const Center(child: Text('No products found'));
               },
-            );
-          }
-
-          // If no data available
-          return const Center(child: Text('No products found'));
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

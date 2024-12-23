@@ -7,7 +7,6 @@ import 'package:product_catalog_project/core/models/category.dart';
 import 'package:product_catalog_project/core/models/product.dart';
 import 'package:product_catalog_project/core/providers/repository_provider.dart';
 import 'package:product_catalog_project/core/routes/app_router.dart';
-import 'package:product_catalog_project/features/category/views/category_products_view.dart';
 import 'package:product_catalog_project/features/home/state/home_state.dart';
 import 'package:product_catalog_project/features/home/view_models/home_view_model.dart';
 import 'package:product_catalog_project/product/widgets/custom_logo_widget.dart';
@@ -23,6 +22,9 @@ class HomeView extends ConsumerStatefulWidget {
 class _HomeViewState extends ConsumerState<HomeView> {
   late HomeViewModel viewModel;
   int? selectedCategoryIndex = 0;
+  TextEditingController _searchController =
+      TextEditingController(); // Search controller
+  List<Product> filteredProducts = [];
 
   @override
   void initState() {
@@ -30,6 +32,33 @@ class _HomeViewState extends ConsumerState<HomeView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel = ref.read(homeViewModelProvider.notifier)..loadData();
     });
+
+    _searchController.addListener(() {
+      setState(_filterProducts);
+    });
+  }
+
+  // Method to filter products based on search term
+  void _filterProducts() {
+    final searchTerm = _searchController.text.toLowerCase();
+    final allProducts = viewModel.state.products;
+
+    filteredProducts = allProducts.where((product) {
+      final productName = product.name?.toLowerCase() ?? '';
+      final productAuthor = product.author?.toLowerCase() ?? '';
+      return productName.contains(searchTerm) ||
+          productAuthor.contains(searchTerm);
+    }).toList();
+  }
+
+  // Add a method to handle category filtering
+  void _filterCategoryProducts(List<Product> allProducts, String searchTerm) {
+    filteredProducts = allProducts.where((product) {
+      final productName = product.name?.toLowerCase() ?? '';
+      final productAuthor = product.author?.toLowerCase() ?? '';
+      return productName.contains(searchTerm) ||
+          productAuthor.contains(searchTerm);
+    }).toList();
   }
 
   @override
@@ -37,6 +66,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final state = ref.watch(homeViewModelProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Catalog'),
+      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.errorMessage.isNotEmpty
@@ -45,8 +77,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHeaderRow(),
+                    _buildSearchBar(),
                     _buildCategoriesList(state.categories),
-                    _buildSearchAndCategories(),
                     _buildProductSections(state),
                   ],
                 ),
@@ -56,28 +88,22 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Widget _buildHeaderRow() {
     return Padding(
       padding: EdgeInsets.only(
-        left: context.width * 0.05, // Add padding to the left and right
+        left: context.width * 0.05,
         right: context.width * 0.05,
-        top: context.height * 0.05,
+        top: context.height * 0.01,
         bottom: context.height * 0.02,
       ),
       child: SizedBox(
         height: context.height * 0.07,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // This ensures the items are spaced to the left and right
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Logo aligned to the left
             SizedBox(
               width: context.width * 0.15,
               child: const LogoWidget(),
             ),
-
-            // Filter text aligned to the right
             Padding(
-              padding: EdgeInsets.only(
-                right: context.width * 0.05,
-              ),
+              padding: EdgeInsets.only(right: context.width * 0.05),
               child: Text(
                 'Catalog',
                 style: context.textTheme.titleLarge,
@@ -89,12 +115,30 @@ class _HomeViewState extends ConsumerState<HomeView> {
     );
   }
 
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: context.width * 0.05),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search for products...',
+          prefixIcon: const Icon(Icons.search),
+          fillColor: const Color.fromARGB(26, 97, 81, 221),
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildCategoriesList(List<Category> categories) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          // Adding the 'ALL' chip at the beginning
           Padding(
             padding: context.paddingLow,
             child: ChoiceChip(
@@ -102,13 +146,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
               selected: selectedCategoryIndex == null,
               onSelected: (isSelected) {
                 setState(() {
-                  selectedCategoryIndex =
-                      null; // Set to null to indicate 'ALL' is selected
+                  selectedCategoryIndex = null;
                 });
               },
             ),
           ),
-          // Now adding the category chips dynamically
           ...categories.map((category) {
             int categoryIndex = categories.indexOf(category);
             return Padding(
@@ -129,32 +171,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
     );
   }
 
-  Widget _buildSearchAndCategories() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: context.width * 0.05,
-        right: context.width * 0.05,
-      ),
-      child: Column(
-        children: [
-          // Search bar
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search for products...',
-              prefixIcon: const Icon(Icons.search),
-              fillColor: const Color.fromARGB(26, 97, 81, 221),
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+  // Updated product sections with category filtering applied individually
   Widget _buildProductSections(HomeState state) {
     return Expanded(
       child: ListView.builder(
@@ -172,6 +189,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (snapshot.hasData) {
                 final productsInCategory = snapshot.data!;
+
+                // Filter products based on the search input
+                _filterCategoryProducts(
+                    productsInCategory, _searchController.text);
+
                 return Column(
                   children: [
                     Padding(
@@ -183,7 +205,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            category.name,
+                            category.name ?? '',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           TextButton(
@@ -201,7 +223,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         ],
                       ),
                     ),
-                    _buildProductsList(productsInCategory),
+                    _buildProductsList(
+                        filteredProducts), // Use filteredProducts here
                   ],
                 );
               } else {
@@ -215,10 +238,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   Widget _buildProductsList(List<Product> products) {
+    // Filtered products based on search query
+    final productsToShow =
+        _searchController.text.isEmpty ? products : filteredProducts;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: products.map((product) {
+        children: productsToShow.map((product) {
           final imageUrl = viewModel.getImageUrl(product.cover ?? '');
           return GestureDetector(
             onTap: () {
@@ -269,14 +296,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Product name with truncation if needed
                             Text(
                               product.name ?? '',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: context.textTheme.bodyMedium,
                             ),
-                            // Author name
                             Text(
                               product.author ?? '',
                               maxLines: 1,
@@ -285,9 +310,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                             SizedBox(
                               height: context.height * 0.05,
                             ),
-
                             const Spacer(),
-                            // Product price at the bottom
                             Text(
                               '\$${product.price}',
                               style: context.textTheme.bodyLarge?.copyWith(
