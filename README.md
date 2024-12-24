@@ -29,29 +29,6 @@ Gereksinimler
 	3.	Xcode: iOS üzerinde geliştirme yapmak için (macOS için).
 	4.	Android Studio: Android üzerinde geliştirme yapmak için.
 
-lib/
-  ├── core/
-  │   ├── di/                     # Bağımlılık Enjeksiyonu (DI) yönetimi
-  │   ├── extensions/              # Flutter ve Dart uzantıları
-  │   ├── models/                  # Veri modelleri (Product, Category vb.)
-  │   ├── providers/               # Riverpod sağlayıcıları
-  │   ├── repository/              # Veritabanı işlemleri ve servisler
-  │   ├── routes/                  # Yönlendirme işlemleri (AutoRoute)
-  │   ├── service/                 # Servisler (API servisleri, Auth vb.)
-  ├── features/
-  │   ├── category/                # Kategori ekranı ve yönetimi
-  │   ├── home/                    # Anasayfa ekranı
-  │   ├── login/                   # Giriş ekranı
-  │   │   ├── state/               # Login işlemleri için state yönetimi
-  │   │   ├── view_models/         # Login ile ilgili view modelleri
-  │   │   ├── views/               # Login sayfası
-  │   │   ├── widgets/             # Login ekranı için widget'lar
-  │   ├── product/                 # Ürünler ekranı
-  │   ├── register/                # Kayıt olma ekranı
-  │   ├── splash/                  # Splash ekranı
-  ├── main.dart                     # Uygulama başlatma noktası
-  ├── linux/                        # Linux platformu için ayarlar
-  ├── macos/                        # macOS platformu için ayarlar
 
   Kurulum
 
