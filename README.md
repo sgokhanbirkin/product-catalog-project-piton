@@ -7,9 +7,7 @@
 	•	Splash Ekranı: Kimlik doğrulama token’ı kontrol edilip yönlendirme yapılır.
 	•	Kategori Yönetimi: Ürünler kategorilere ayrılır ve kategoriye göre filtrelenebilir.
 
-Ekran Görüntüleri
 
-Projenizin UI’sının ekran görüntülerini buraya ekleyin.
 
 Teknolojik Yığın (Tech Stack)
 	•	Flutter: Çapraz platform mobil uygulama geliştirme.
@@ -45,6 +43,8 @@ Projenin çalışabilmesi için aşağıdaki adımları izleyebilirsiniz:
  # API URL
 
 API_BASE_URL=https://example.com/api
+
+Ekran Görüntüleri
 
 
 ![simulator_screenshot_4A8AABDA-244B-461E-BA71-7D385F117E8B](https://github.com/user-attachments/assets/54297ef3-2891-48d8-977a-4f6dc7661e69)
