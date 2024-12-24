@@ -20,8 +20,8 @@ class SplashViewModel extends StateNotifier<bool> {
 
   // 3 saniye sonra yönlendirmeyi başlatan fonksiyon
   void startTimer() {
-    _timer = Timer(const Duration(seconds: 1), () {
-      state = true; // 3 saniye sonra state değişiyor ve yönlendirme yapılacak
+    _timer = Timer(const Duration(seconds: 3), () async {
+      await checkTokenAndNavigate();
     });
   }
 
