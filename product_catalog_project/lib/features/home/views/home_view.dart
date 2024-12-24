@@ -22,8 +22,7 @@ class HomeView extends ConsumerStatefulWidget {
 class _HomeViewState extends ConsumerState<HomeView> {
   late HomeViewModel viewModel;
   int? selectedCategoryIndex = 0;
-  TextEditingController _searchController =
-      TextEditingController(); // Search controller
+  TextEditingController _searchController = TextEditingController();
   List<Product> filteredProducts = [];
 
   @override
@@ -66,9 +65,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final state = ref.watch(homeViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Catalog'),
-      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.errorMessage.isNotEmpty
@@ -76,6 +72,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: context.height * 0.05,
+                    ),
                     _buildHeaderRow(),
                     _buildSearchBar(),
                     _buildCategoriesList(state.categories),

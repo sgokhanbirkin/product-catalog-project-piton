@@ -1,5 +1,7 @@
 // lib/core/service/auth_service.dart
 
+// ignore_for_file: use_build_context_synchronously, literal_only_boolean_expressions, avoid_dynamic_calls, inference_failure_on_function_invocation
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -63,20 +65,18 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final token = response.data['action_register']['token'];
-        print('Token: $token');
         // Token'ı kaydet
         await saveToken(token as String);
 
         // Eğer "Remember Me" aktifse token'ı kaydedeceğiz
         if (true) {
-          // `rememberMe` burada kullanılabilir
           await saveToken(token);
         }
       } else {
         _showErrorPopup(context, 'register.register_error_fail'.tr());
         throw Exception('register.register_error_fail'.tr());
       }
-    } on DioException catch (e) {
+    } on DioException {
       _showErrorPopup(context, 'register.register_error_api'.tr());
       throw Exception('register.register_error_api'.tr());
     } catch (e) {

@@ -30,25 +30,25 @@ class ProductRepository {
 
   Future<void> fetchProductsByCategory(int categoryId) async {
     try {
-      print('Fetching products for category $categoryId');
       final response = await _networkManager.dio.get('/products/$categoryId');
       if (response.statusCode == 200) {
         // Check if 'product' key exists and is not null
         final dynamicResponse = response.data['product'] as List<dynamic>;
         // Convert response data into Product objects
-        print('Converting response data to Product objects');
 
         var products = Product.fromJsonList(dynamicResponse);
-
-        print('________________-  ');
-        print('Fetched products: $products');
+        // Add product to new value to categoryId
+        for (var product in products) {
+          final productBox =
+              await Hive.openBox<Product>('product_${product.id}');
+          await productBox.put(product.id, product);
+        }
         // Store fetched products in the cache
         final categoryBox = await Hive.openBox<Product>('category_$categoryId');
         await categoryBox.clear(); // Clear any old data
         await categoryBox.addAll(products); // Add new products for the category
       }
     } on DioException catch (e) {
-      print('Network error: $e');
       throw Exception('Beklenmeyen bir hata oluştu : $e');
     } catch (e) {
       throw Exception('Beklenmeyen bir hata oluştu : $e');
@@ -82,7 +82,6 @@ class ProductRepository {
       final List<Product> productsInCategory = productBox.values.toList();
       return productsInCategory;
     } catch (e) {
-      print("Hata: $e");
       throw Exception('Ürünler alınırken bir hata oluştu');
     }
   }
@@ -91,8 +90,8 @@ class ProductRepository {
   Future<Product> getProductById(int productId) async {
     try {
       // Open the general product box
-      final Box<Product> productBox = await Hive.openBox<Product>('products');
-
+      final Box<Product> productBox =
+          await Hive.openBox<Product>('product_$productId');
       // Retrieve the product with the given productId
       final product = productBox.get(productId);
 

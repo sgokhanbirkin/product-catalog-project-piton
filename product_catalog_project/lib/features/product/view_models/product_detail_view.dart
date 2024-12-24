@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:product_catalog_project/core/models/product.dart';
 import 'package:product_catalog_project/core/providers/repository_provider.dart';
 import 'package:product_catalog_project/core/repository/product_repository.dart';
-import 'package:product_catalog_project/core/models/product.dart';
 
 final productDetailViewModelProvider = Provider<ProductDetailViewModel>((ref) {
   final productRepository = ref.read(productRepositoryProvider);

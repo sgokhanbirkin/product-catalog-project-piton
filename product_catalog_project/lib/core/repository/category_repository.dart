@@ -29,11 +29,9 @@ class CategoryRepository {
           List<Category> categories = dynamicResponse.map((item) {
             return Category.fromJson(item as Map<String, dynamic>);
           }).toList();
-
           // Cache the fetched categories in Hive
           await _categoryCacheManager.putItems(categories);
 
-          print('Categories successfully saved to cache');
           return categories;
         } else {
           throw Exception('Failed to load categories');
