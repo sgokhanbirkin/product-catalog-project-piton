@@ -47,6 +47,10 @@ API_BASE_URL=https://example.com/api
 Ekran Görüntüleri
 
 
+https://github.com/user-attachments/assets/70cb55ca-bb79-43cd-90a3-795f5a7d2cce
+
+
+
 ![simulator_screenshot_4A8AABDA-244B-461E-BA71-7D385F117E8B](https://github.com/user-attachments/assets/54297ef3-2891-48d8-977a-4f6dc7661e69)
 ![simulator_screenshot_6EA60DF8-4756-4F2E-B253-5C2A7740F3E6](https://github.com/user-attachments/assets/bdaaf069-ca65-486b-8bad-fb8572981560)
  ![simulator_screenshot_DEC0F5E8-26F4-4325-98F2-C62301076195](https://github.com/user-attachments/assets/482ab578-7989-44b4-829b-7feea906c912)
