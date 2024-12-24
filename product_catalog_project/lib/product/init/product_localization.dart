@@ -24,5 +24,5 @@ final class ProductLocalization extends EasyLocalization {
     required Locales value,
     required BuildContext context,
   }) =>
-      context.setLocale(value.locale);
+      context.setLocale(value.locale); // This will change the language
 }

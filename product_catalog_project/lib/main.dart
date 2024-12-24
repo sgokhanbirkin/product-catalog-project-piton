@@ -38,8 +38,7 @@ void main() async {
           Locale('en'),
           Locale('tr'),
         ],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en'),
+        path: 'asset/translations',
         child: ProductLocalization(
           child: MyApp(),
         ),
@@ -54,7 +53,7 @@ class MyApp extends ConsumerWidget {
     final appRouter = GetIt.instance<AppRouter>();
 
     return MaterialApp.router(
-      title: tr('app_title'),
+      title: 'Piton Product Catalog',
       scaffoldMessengerKey: DioErrorHandling.messengerKey,
       routerDelegate: appRouter.delegate(),
       routeInformationParser: appRouter.defaultRouteParser(),

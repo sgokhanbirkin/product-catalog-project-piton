@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:product_catalog_project/core/providers/auth_service_provider.dart';
 import 'package:product_catalog_project/core/service/auth_service.dart';
+import 'package:product_catalog_project/core/routes/app_router.dart'; // Import for routing
 
 enum AuthStatus { authenticated, unauthenticated }
 
@@ -30,8 +33,11 @@ class AuthNotifier extends StateNotifier<AuthStatus> {
     state = AuthStatus.authenticated;
   }
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     await _authService.deleteToken();
     state = AuthStatus.unauthenticated;
+
+    // Navigate to the login page after logging out
+    context.router.replace(LoginRoute()); // Using AutoRoute for navigation
   }
 }

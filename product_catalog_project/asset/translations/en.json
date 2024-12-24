@@ -52,6 +52,13 @@
           "invalid_email": "Invalid email format.",
           "password_too_short": "Password must be at least 6 characters."
           
+        },
+        "homeview": {
+          "catalog": "Catalog",
+          "search": "Search for products...",
+          "all": "ALL",
+          "no_products": "No products found",
+          "no_image": "No image found"
         }
     
 

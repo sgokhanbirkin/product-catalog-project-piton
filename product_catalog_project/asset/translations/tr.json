@@ -50,5 +50,12 @@
         "full_name_required": "Adınızı giriniz.",
         "invalid_email": "Geçersiz e-posta formatı.",
         "password_too_short": "Şifre en az 6 karakter olmalıdır."
-  }
+    },
+    "homeview": {
+        "catalog": "Katalog",
+        "search": "Ürünleri ara...",
+        "all": "TÜMÜ",
+        "no_products": "Ürün bulunamadı",
+        "no_image": "Resim bulunamadı"
+      }
 }

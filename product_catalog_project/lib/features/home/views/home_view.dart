@@ -1,14 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:product_catalog_project/core/extensions/context_extensions.dart';
 import 'package:product_catalog_project/core/models/category.dart';
 import 'package:product_catalog_project/core/models/product.dart';
+import 'package:product_catalog_project/core/providers/auth_provider.dart';
+import 'package:product_catalog_project/core/providers/language_provider.dart';
 import 'package:product_catalog_project/core/providers/repository_provider.dart';
 import 'package:product_catalog_project/core/routes/app_router.dart';
 import 'package:product_catalog_project/features/home/state/home_state.dart';
 import 'package:product_catalog_project/features/home/view_models/home_view_model.dart';
+import 'package:product_catalog_project/features/home/view_models/language_view_model.dart';
+import 'package:product_catalog_project/product/init/product_localization.dart';
+import 'package:product_catalog_project/product/utility/constants/locales.dart';
 import 'package:product_catalog_project/product/widgets/custom_logo_widget.dart';
 
 @RoutePage()
@@ -50,6 +56,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
     }).toList();
   }
 
+  void _logout() {
+    // Oturumdan çıkma işlemi
+    ref
+        .read(authProvider.notifier)
+        .logout(context); // auth_provider içinde tanımlı logout fonksiyonu
+  }
+
   // Add a method to handle category filtering
   void _filterCategoryProducts(List<Product> allProducts, String searchTerm) {
     filteredProducts = allProducts.where((product) {
@@ -60,9 +73,27 @@ class _HomeViewState extends ConsumerState<HomeView> {
     }).toList();
   }
 
+  void _selectLanguage(String language) {
+    // Update language provider
+    ref.read(languageProvider.notifier).state = language;
+
+    // Change the app language using EasyLocalization
+    if (language == 'tr') {
+      ProductLocalization.updateLanguage(value: Locales.tr, context: context);
+    } else if (language == 'en') {
+      ProductLocalization.updateLanguage(value: Locales.en, context: context);
+    }
+
+    // Hide language menu after selection
+    ref
+        .read(languageViewModelProvider.notifier)
+        .setLanguageMenuVisibility(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(homeViewModelProvider);
+    final isLanguageMenuVisible = ref.watch(languageViewModelProvider);
 
     return Scaffold(
       body: state.isLoading
@@ -79,8 +110,47 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     _buildSearchBar(),
                     _buildCategoriesList(state.categories),
                     _buildProductSections(state),
+                    if (isLanguageMenuVisible) _buildLanguageMenu(),
                   ],
                 ),
+    );
+  }
+
+  Widget _buildLanguageMenu() {
+    return Padding(
+      padding: context.paddingLow,
+      child: Column(
+        children: [
+          ListTile(
+            title: const Text('Türkçe'),
+            leading: Radio<String>(
+              value: 'tr',
+              groupValue: ref.watch(languageProvider),
+              onChanged: (value) {
+                _selectLanguage('tr');
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text('English'),
+            leading: Radio<String>(
+              value: 'en',
+              groupValue: ref.watch(languageProvider),
+              onChanged: (value) {
+                _selectLanguage('en');
+              },
+            ),
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text('Çıkış Yap'),
+            leading: const Icon(Icons.logout),
+            onTap: () {
+              _logout(); // Logout işlemi
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -97,14 +167,21 @@ class _HomeViewState extends ConsumerState<HomeView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              width: context.width * 0.15,
-              child: const LogoWidget(),
+            GestureDetector(
+              child: SizedBox(
+                width: context.width * 0.15,
+                child: const LogoWidget(),
+              ),
+              onTap: () {
+                ref
+                    .read(languageViewModelProvider.notifier)
+                    .toggleLanguageMenu(); // Toggle the menu visibility on logo tap
+              },
             ),
             Padding(
               padding: EdgeInsets.only(right: context.width * 0.05),
               child: Text(
-                'Catalog',
+                'homeview.catalog'.tr(),
                 style: context.textTheme.titleLarge,
               ),
             ),
@@ -120,7 +197,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
-          hintText: 'Search for products...',
+          hintText: 'homeview.search'.tr(),
           prefixIcon: const Icon(Icons.search),
           fillColor: const Color.fromARGB(26, 97, 81, 221),
           filled: true,
@@ -141,7 +218,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
           Padding(
             padding: context.paddingLow,
             child: ChoiceChip(
-              label: Text('ALL'),
+              label: Text('homeview.all'.tr()),
               selected: selectedCategoryIndex == null,
               onSelected: (isSelected) {
                 setState(() {
@@ -227,7 +304,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   ],
                 );
               } else {
-                return const Center(child: Text('No products found'));
+                return Center(child: Text('homeview.no_products'.tr()));
               }
             },
           );
@@ -270,8 +347,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           return const Center(
                               child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
-                          return const Center(
-                              child: Text('Error loading image'));
+                          return Center(child: Text('homeview.no_image'.tr()));
                         } else if (snapshot.hasData) {
                           return Center(
                             child: CachedNetworkImage(
@@ -281,7 +357,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                             ),
                           );
                         } else {
-                          return const Center(child: Text('No image found'));
+                          return Center(child: Text('homeview.no_image'.tr()));
                         }
                       },
                     ),
