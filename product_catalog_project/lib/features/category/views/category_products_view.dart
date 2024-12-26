@@ -26,8 +26,7 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
   late Future<List<Product>> products;
   late CategoryProductsViewModel viewModel;
   late ProductRepository productRepository;
-  TextEditingController _searchController =
-      TextEditingController(); // Text controller for search query
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -38,7 +37,6 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
   }
 
   void _filterProducts(String query) {
-    // Filter products based on the search query
     setState(() {
       products = productRepository.getProductsByCategory(widget.categoryId);
       products = products.then((productList) {
@@ -96,7 +94,7 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
                   borderSide: BorderSide.none,
                 ),
               ),
-              onChanged: _filterProducts, // Trigger filter on text change
+              onChanged: _filterProducts,
             ),
           ),
           Expanded(
@@ -113,7 +111,7 @@ class _CategoryProductsViewState extends ConsumerState<CategoryProductsView> {
                   final productsInCategory = snapshot.data!;
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 items per row
+                      crossAxisCount: 2,
                       crossAxisSpacing: context.width * 0.04,
                       mainAxisSpacing: context.height * 0.03,
                       childAspectRatio: 0.55,
@@ -168,7 +166,6 @@ class _productCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image section
           Padding(
             padding: EdgeInsets.only(top: context.height * 0.0025),
             child: FutureBuilder<String>(
@@ -183,7 +180,7 @@ class _productCard extends StatelessWidget {
                     imageUrl: imageSnapshot.data ?? '',
                     fit: BoxFit.cover,
                     width: double.infinity,
-                    height: context.height * 0.25, // Adjust the image size
+                    height: context.height * 0.25,
                   );
                 } else {
                   return const Icon(Icons.image);
@@ -191,7 +188,6 @@ class _productCard extends StatelessWidget {
               },
             ),
           ),
-          // Product Name
           Padding(
             padding: context.paddingLow,
             child: Text(
@@ -203,25 +199,21 @@ class _productCard extends StatelessWidget {
               ),
             ),
           ),
-          // Row for Author and Price
           Padding(
             padding: context.paddingLow,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Author Name
                 Flexible(
                   child: Text(
                     product.author ?? '',
-                    maxLines: 1, // Allow the author name to wrap if needed
-                    overflow:
-                        TextOverflow.ellipsis, // Ensure overflow is handled
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: context.textTheme.bodySmall?.copyWith(
                       fontSize: 10,
                     ),
                   ),
                 ),
-                // Product Price
                 Text(
                   '\$${product.price}',
                   style: context.textTheme.bodySmall?.copyWith(

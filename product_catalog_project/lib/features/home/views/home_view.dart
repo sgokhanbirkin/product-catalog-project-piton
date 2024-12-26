@@ -65,12 +65,24 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   // Add a method to handle category filtering
   void _filterCategoryProducts(List<Product> allProducts, String searchTerm) {
-    filteredProducts = allProducts.where((product) {
-      final productName = product.name?.toLowerCase() ?? '';
-      final productAuthor = product.author?.toLowerCase() ?? '';
-      return productName.contains(searchTerm) ||
-          productAuthor.contains(searchTerm);
-    }).toList();
+    final homeState = ref.read(homeViewModelProvider);
+    if (selectedCategoryIndex == null) {
+      filteredProducts = allProducts.where((product) {
+        final productName = product.name?.toLowerCase() ?? '';
+        final productAuthor = product.author?.toLowerCase() ?? '';
+        return productName.contains(searchTerm) ||
+            productAuthor.contains(searchTerm);
+      }).toList();
+    } else {
+      final selectedCategory = homeState.categories[selectedCategoryIndex!];
+      filteredProducts = allProducts.where((product) {
+        final productName = product.name?.toLowerCase() ?? '';
+        final productAuthor = product.author?.toLowerCase() ?? '';
+        final matchesSearch = productName.contains(searchTerm) ||
+            productAuthor.contains(searchTerm);
+        return matchesSearch;
+      }).toList();
+    }
   }
 
   void _selectLanguage(String language) {
@@ -254,6 +266,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
         itemCount: state.categories.length,
         itemBuilder: (context, index) {
           final category = state.categories[index];
+
+          if (selectedCategoryIndex != null && selectedCategoryIndex != index) {
+            return const SizedBox.shrink();
+          }
+
           return FutureBuilder<List<Product>>(
             future: ref
                 .read(productRepositoryProvider)
@@ -299,8 +316,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         ],
                       ),
                     ),
-                    _buildProductsList(
-                        filteredProducts), // Use filteredProducts here
+                    _buildProductsList(filteredProducts),
                   ],
                 );
               } else {
